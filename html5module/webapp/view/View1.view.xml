@@ -1,0 +1,17 @@
+<mvc:View xmlns:mvc="sap.ui.core.mvc" xmlns="sap.m" controllerName="ns.html5module.controller.View1" displayBlock="true">
+	<Shell id="shell">
+		<App id="app">
+			<pages>
+				<Page id="page" title="{i18n>title}">
+					<content>
+					    <List noDataText="Drop list items here" id="list0" items="{/A_BusinessPartner}">
+					        <items>
+					            <StandardListItem type="Navigation" description="{BusinessPartnerFullName}" icon="sap-icon://picture" id="item0" title="{BusinessPartnerCategory}"/>
+					        </items>
+					    </List>
+					</content>
+				</Page>
+			</pages>
+		</App>
+	</Shell>
+</mvc:View>

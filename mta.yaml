@@ -1,0 +1,61 @@
+_schema-version: '3.2'
+ID: yeomandemo
+version: 0.0.1
+modules:
+  - name: yeomandemo_appRouter
+    type: approuter.nodejs
+    path: yeomandemo_appRouter
+    requires:
+      - name: yeomandemo_html_repo_runtime
+      - name: uaa_yeomandemo
+      - name: dest_yeomandemo
+    parameters:
+      disk-quota: 256M
+      memory: 256M
+  - name: yeomandemo_ui_deployer
+    type: com.sap.html5.application-content
+    path: yeomandemo_ui_deployer
+    requires:
+      - name: yeomandemo_html_repo_host
+    build-parameters:
+      requires:
+        - artifacts:
+            - ./*
+          name: html5module
+          target-path: resources/html5module
+  - name: html5module
+    type: html5
+    path: html5module
+    build-parameters:
+      build-result: dist
+      builder: custom
+      commands:
+        - npm run build
+      supported-platforms: []
+resources:
+  - name: yeomandemo_html_repo_runtime
+    type: org.cloudfoundry.managed-service
+    parameters:
+      service: html5-apps-repo
+      service-plan: app-runtime
+  - name: yeomandemo_html_repo_host
+    type: org.cloudfoundry.managed-service
+    parameters:
+      service: html5-apps-repo
+      service-plan: app-host
+  - name: uaa_yeomandemo
+    type: org.cloudfoundry.managed-service
+    parameters:
+      path: ./xs-security.json
+      service: xsuaa
+      service-plan: application
+  - name: dest_yeomandemo
+    type: org.cloudfoundry.managed-service
+    parameters:
+      service: destination
+      service-plan: lite
+build-parameters:
+  before-all:
+    - builder: custom
+      commands:
+        - npm install
